@@ -1,7 +1,4 @@
-# Stack Exchange
-
-
-Stock Exchange
+# Stock Exchange
 
 This project will model a system that handles the mediation of sellers, buyers and the offers that they publish. The system revolves around a central resource “bucket”, called the screen. Every participant to the stock market interacts with the screen in a number of ways:
 
