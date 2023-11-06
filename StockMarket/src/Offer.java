@@ -7,25 +7,36 @@ import java.util.Random;
 // same with participant?
 
 public class Offer {
-    private String ID;
-    private boolean forSale;
-    private String ownerID;
 
-    public Offer(String ID, boolean forSale, String ownerID) {
-        this.ID = ID;
+    private static int numInstance = 0;
+    private int ID; // unique ID of the offer
+    private String resource; // selling potatoes, USD, etc...
+    private boolean forSale; // 0 for buying, 1 for selling
+    private String ownerID; // ID string of the owner who made the class
+
+    public int getID() {
+        return ID;
+    }
+
+    public Offer(String resource, boolean forSale, String ownerID) {
+        this.ID = numInstance;
+        numInstance += 1;
+        this.resource = resource;
         this.forSale = forSale;
         this.ownerID = ownerID;
     }
 
     public Offer(String ownerID) {
-        List<String> randomIDList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
+        this.ID = numInstance;
+        numInstance += 1;
+
+        List<String> randomResourceList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
 
         Random rand = new Random();
-        this.ID = randomIDList.get(rand.nextInt(randomIDList.size()));
+        // pick a random resource from the aforementioned list
+        this.resource = randomResourceList.get(rand.nextInt(randomResourceList.size()));
 
-        if(rand.nextInt() % 2 == 0){
-            this.forSale = false;
-        } else { this.forSale = true; }
+        this.forSale = rand.nextInt() % 2 != 0; // pick false or true randomly
 
         this.ownerID = ownerID;
 //        System.out.println(this);
@@ -34,7 +45,8 @@ public class Offer {
     @Override
     public String toString() {
         return "Offer{" +
-                "ID='" + ID + '\'' +
+                "ID=" + ID +
+                ", resource='" + resource + '\'' +
                 ", forSale=" + forSale +
                 ", ownerID='" + ownerID + '\'' +
                 '}';

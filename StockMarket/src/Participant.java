@@ -8,14 +8,15 @@ public class Participant implements Runnable {
         this.pendingOffers = pendingOffers;
     }
 
-    public void addOfferToPending(Offer toAdd){
-        this.pendingOffers.add(toAdd);
-    }
+
 
     public Participant(String participantID) {
         this.participantID = participantID;
     }
 
+    public void addOfferToPending(Offer toAdd){
+        this.pendingOffers.add(toAdd);
+    }
     public void populateOffers(int numOffers){
         for (int i = 0; i < numOffers; i++){
             Offer aux = new Offer(participantID);
@@ -25,7 +26,7 @@ public class Participant implements Runnable {
 
     public void addOffers(){
         for (Offer offer : pendingOffers) {
-            Screen.offers.add(offer);
+            Screen.offers.put(offer.getID(), offer);
             System.out.println(participantID + " added " + offer);
             try {
                 Thread.sleep(1000);
