@@ -3,11 +3,15 @@ import java.util.List;
 
 public class StockExchangeMain {
     public static void main(String[] args) {
-        Screen myScreen = new Screen();
-        Participant participant1= new Participant("Nico",List.of("*", "**", "***","****","*****"),myScreen);
-        Participant participant2= new Participant("Didi",List.of("^", "^^", "^^^","^^^^","^^^^^","^^^^^^"),myScreen);
-        Participant participant3= new Participant("Stama",List.of("$", "$$", "$$$","$$$$","$$$$$"),myScreen);
-        Participant participant4= new Participant("Marius",List.of("@", "@@", "@@@","@@@@"),myScreen);
+        Participant participant1= new Participant("Nico");
+        Participant participant2= new Participant("Didi");
+        Participant participant3= new Participant("Stama");
+        Participant participant4= new Participant("Marius");
+
+        participant1.populateOffers(5);
+        participant2.populateOffers(5);
+        participant3.populateOffers(5);
+        participant4.populateOffers(5);
 
         Thread t1=new Thread(participant1);
         Thread t2=new Thread(participant2);
@@ -28,12 +32,11 @@ public class StockExchangeMain {
             e.printStackTrace();
         }
 
-        /*
         System.out.println("Final list of offers:");
-        for (int i = 0; i < myScreen.offers.size(); i++) {
-            System.out.println("Element " + (i + 1) + ": " + myScreen.offers.get(i));
+        for (int i = 0; i < Screen.offers.size(); i++) {
+            System.out.println("Element " + (i + 1) + ": " + Screen.offers.get(i));
         }
-        */
+
 
 }
 }

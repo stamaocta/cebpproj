@@ -1,24 +1,38 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Participant implements Runnable {
     private String participantID;
-    private List<String> pendingOffers;
-    private Screen myScreen;
-    public Participant(String participantID, List<String> pendingOffers,Screen screen) {
+    private ArrayList<Offer> pendingOffers = new ArrayList<Offer>();
+    public void setPendingOffers(ArrayList<Offer> pendingOffers) {
+        this.pendingOffers = pendingOffers;
+    }
+
+    public void addOfferToPending(Offer toAdd){
+        this.pendingOffers.add(toAdd);
+    }
+
+    public Participant(String participantID) {
         this.participantID = participantID;
-        this.pendingOffers=pendingOffers;
-        this.myScreen=screen;
+    }
+
+    public void populateOffers(int numOffers){
+        for (int i = 0; i < numOffers; i++){
+            Offer aux = new Offer(participantID);
+            addOfferToPending(aux);
+        }
     }
 
     public void addOffers(){
-        for (String offer : pendingOffers) {
-            myScreen.offers.add(offer);
+        for (Offer offer : pendingOffers) {
+            Screen.offers.add(offer);
             System.out.println(participantID + " added " + offer);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            // delete offers after pushing?
         }
     }
 
