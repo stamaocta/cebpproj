@@ -18,6 +18,14 @@ public class Offer {
         return ID;
     }
 
+    public String getResource() {
+        return resource;
+    }
+
+    public boolean isForSale() {
+        return forSale;
+    }
+
     public Offer(String resource, boolean forSale, String ownerID) {
         this.ID = numInstance;
         numInstance += 1;

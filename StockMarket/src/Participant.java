@@ -27,7 +27,7 @@ public class Participant implements Runnable {
     public void addOffers(){
         for (Offer offer : pendingOffers) {
             Screen.offers.put(offer.getID(), offer);
-            System.out.println(participantID + " added " + offer);
+            //System.out.println(participantID + " added " + offer);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

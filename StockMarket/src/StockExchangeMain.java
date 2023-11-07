@@ -3,6 +3,7 @@ import java.util.List;
 
 public class StockExchangeMain {
     public static void main(String[] args) {
+        Screen screen= new Screen();
         Participant participant1= new Participant("Nico");
         Participant participant2= new Participant("Didi");
         Participant participant3= new Participant("Stama");
@@ -13,11 +14,13 @@ public class StockExchangeMain {
         participant3.populateOffers(5);
         participant4.populateOffers(5);
 
+        Thread t= new Thread(screen);
         Thread t1=new Thread(participant1);
         Thread t2=new Thread(participant2);
         Thread t3=new Thread(participant3);
         Thread t4=new Thread(participant4);
 
+        t.start();
         t1.start();
         t2.start();
         t3.start();
@@ -33,8 +36,9 @@ public class StockExchangeMain {
         }
 
         System.out.println("Final list of offers:");
-        for (int i = 0; i < Screen.offers.size(); i++) {
-            System.out.println("Element " + (i + 1) + ": " + Screen.offers.get(i));
+        for (Integer i: Screen.offers.keySet()) {
+
+            System.out.println( Screen.offers.get(i));
         }
 
 
