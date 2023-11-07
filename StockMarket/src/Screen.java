@@ -1,8 +1,4 @@
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 // Screen class
 // replace list with ConcurrentHashMap which has a key and a value:
@@ -36,8 +32,10 @@ public final class Screen implements Runnable{
 
                 if(offer1.getResource().equals(offer2.getResource()) && offer1.isForSale()!=offer2.isForSale()){
                     System.out.println(offer1.toString() + " matched " + offer2.toString());
-                    offers.remove(offer1.getID());
-                    offers.remove(offer2.getID());
+                    offer1.getParticipant().notifyTransaction(offer1.getOfferID());
+                    offer2.getParticipant().notifyTransaction(offer2.getOfferID());
+                    offers.remove(offer1.getOfferID());
+                    offers.remove(offer2.getOfferID());
                     return ;
                 }
 

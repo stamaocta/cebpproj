@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Participant implements Runnable {
     private String participantID;
@@ -14,19 +13,26 @@ public class Participant implements Runnable {
         this.participantID = participantID;
     }
 
+
+    public String getParticipantID() {
+        return participantID;
+    }
+
+
+
     public void addOfferToPending(Offer toAdd){
         this.pendingOffers.add(toAdd);
     }
     public void populateOffers(int numOffers){
         for (int i = 0; i < numOffers; i++){
-            Offer aux = new Offer(participantID);
+            Offer aux = new Offer(this);
             addOfferToPending(aux);
         }
     }
 
     public void addOffers(){
         for (Offer offer : pendingOffers) {
-            Screen.offers.put(offer.getID(), offer);
+            Screen.offers.put(offer.getOfferID(), offer);
             //System.out.println(participantID + " added " + offer);
             try {
                 Thread.sleep(1000);
@@ -37,8 +43,14 @@ public class Participant implements Runnable {
         }
     }
 
+    public void notifyTransaction(int offerID){
+        System.out.println(participantID + " just transactioned " + offerID);
+    }
+
     @Override
     public void run() {
         addOffers();
     }
+
+
 }

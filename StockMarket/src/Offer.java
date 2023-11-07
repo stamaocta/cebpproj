@@ -9,13 +9,13 @@ import java.util.Random;
 public class Offer {
 
     private static int numInstance = 0;
-    private int ID; // unique ID of the offer
+    private int offerID; // unique ID of the offer
     private String resource; // selling potatoes, USD, etc...
     private boolean forSale; // 0 for buying, 1 for selling
-    private String ownerID; // ID string of the owner who made the class
+    private Participant participant; // the owner who made the class
 
-    public int getID() {
-        return ID;
+    public int getOfferID() {
+        return offerID;
     }
 
     public String getResource() {
@@ -26,16 +26,20 @@ public class Offer {
         return forSale;
     }
 
-    public Offer(String resource, boolean forSale, String ownerID) {
-        this.ID = numInstance;
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public Offer(String resource, boolean forSale, Participant participant) {
+        this.offerID = numInstance;
         numInstance += 1;
         this.resource = resource;
         this.forSale = forSale;
-        this.ownerID = ownerID;
+        this.participant = participant;
     }
 
-    public Offer(String ownerID) {
-        this.ID = numInstance;
+    public Offer(Participant participant) {
+        this.offerID = numInstance;
         numInstance += 1;
 
         List<String> randomResourceList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
@@ -46,17 +50,17 @@ public class Offer {
 
         this.forSale = rand.nextInt() % 2 != 0; // pick false or true randomly
 
-        this.ownerID = ownerID;
+        this.participant = participant;
 //        System.out.println(this);
     }
 
     @Override
     public String toString() {
         return "Offer{" +
-                "ID=" + ID +
+                "ID=" + offerID +
                 ", resource='" + resource + '\'' +
                 ", forSale=" + forSale +
-                ", ownerID='" + ownerID + '\'' +
+                ", ownerID='" + participant.getParticipantID() + '\'' +
                 '}';
     }
 }
