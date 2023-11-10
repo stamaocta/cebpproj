@@ -10,7 +10,8 @@ public class Offer {
 
     private static int numInstance = 0;
     private int offerID; // unique ID of the offer
-    private String resource; // selling potatoes, USD, etc...
+    private String ticker; // selling potatoes, USD, etc...
+    // get rid of forSale and make amount positive/negative? ####################################
     private boolean forSale; // 0 for buying, 1 for selling
     private Participant participant; // the owner who made the class
 
@@ -18,8 +19,8 @@ public class Offer {
         return offerID;
     }
 
-    public String getResource() {
-        return resource;
+    public String getTicker() {
+        return ticker;
     }
 
     public boolean isForSale() {
@@ -30,10 +31,10 @@ public class Offer {
         return participant;
     }
 
-    public Offer(String resource, boolean forSale, Participant participant) {
+    public Offer(String ticker, boolean forSale, Participant participant) {
         this.offerID = numInstance;
         numInstance += 1;
-        this.resource = resource;
+        this.ticker = ticker;
         this.forSale = forSale;
         this.participant = participant;
     }
@@ -46,7 +47,7 @@ public class Offer {
 
         Random rand = new Random();
         // pick a random resource from the aforementioned list
-        this.resource = randomResourceList.get(rand.nextInt(randomResourceList.size()));
+        this.ticker = randomResourceList.get(rand.nextInt(randomResourceList.size()));
 
         this.forSale = rand.nextInt() % 2 != 0; // pick false or true randomly
 
@@ -58,7 +59,7 @@ public class Offer {
     public String toString() {
         return "Offer{" +
                 "ID=" + offerID +
-                ", resource='" + resource + '\'' +
+                ", resource='" + ticker + '\'' +
                 ", forSale=" + forSale +
                 ", ownerID='" + participant.getParticipantID() + '\'' +
                 '}';

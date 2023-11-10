@@ -1,3 +1,4 @@
+import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 
 public class Participant implements Runnable {
@@ -32,6 +33,14 @@ public class Participant implements Runnable {
 
     public void addOffers(){
         for (Offer offer : pendingOffers) {
+            // resource as key; participants fight to add to the same key etc...
+            // list of objects as value
+
+//            if(Screen.offers(resource) exists as list)
+//                Add offer to that list
+//            else
+//                create list corresponding to that resource
+
             Screen.offers.put(offer.getOfferID(), offer);
             //System.out.println(participantID + " added " + offer);
             try {
