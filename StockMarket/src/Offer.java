@@ -7,13 +7,15 @@ import java.util.Random;
 // same with participant?
 
 public class Offer {
+    enum saleEnum {SELL, BUY};
 
     private static int numInstance = 0;
     private int offerID; // unique ID of the offer
     private String ticker; // selling potatoes, USD, etc...
-    // get rid of forSale and make amount positive/negative? ####################################
-    private boolean forSale; // 0 for buying, 1 for selling
+    private saleEnum saleStatus;
     private Participant participant; // the owner who made the class
+    private double price;
+    private int quantity;
 
     public int getOfferID() {
         return offerID;
@@ -23,20 +25,22 @@ public class Offer {
         return ticker;
     }
 
-    public boolean isForSale() {
-        return forSale;
+    public saleEnum isForSale() {
+        return saleStatus;
     }
 
     public Participant getParticipant() {
         return participant;
     }
 
-    public Offer(String ticker, boolean forSale, Participant participant) {
+    public Offer(String ticker, saleEnum saleStatus, Participant participant, double price, int quantity) {
         this.offerID = numInstance;
         numInstance += 1;
         this.ticker = ticker;
-        this.forSale = forSale;
+        this.saleStatus = saleStatus;
         this.participant = participant;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     public Offer(Participant participant) {
@@ -48,20 +52,30 @@ public class Offer {
         Random rand = new Random();
         // pick a random resource from the aforementioned list
         this.ticker = randomResourceList.get(rand.nextInt(randomResourceList.size()));
-
-        this.forSale = rand.nextInt() % 2 != 0; // pick false or true randomly
-
+        if(rand.nextBoolean())
+            this.saleStatus=saleEnum.SELL;
+        else
+            this.saleStatus=saleEnum.BUY;
         this.participant = participant;
+
+        this.price=rand.nextDouble(100,500);
+        this.quantity= rand.nextInt(1,100);
 //        System.out.println(this);
     }
 
     @Override
     public String toString() {
+        String saleSts;
+        if(saleStatus==saleEnum.BUY) saleSts="BUY";
+        else saleSts="SELL";
+
         return "Offer{" +
-                "ID=" + offerID +
-                ", resource='" + ticker + '\'' +
-                ", forSale=" + forSale +
-                ", ownerID='" + participant.getParticipantID() + '\'' +
+                "offerID=" + offerID +
+                ", ticker='" + ticker + '\'' +
+                ", saleStatus=" + saleSts +
+                ", participant=" + participant.getParticipantID() +
+                ", price=" + price +
+                ", quantity=" + quantity +
                 '}';
     }
 }

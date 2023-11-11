@@ -9,10 +9,7 @@ public class StockExchangeMain {
         Participant participant3= new Participant("Stama");
         Participant participant4= new Participant("Marius");
 
-        participant1.populateOffers(5);
-        participant2.populateOffers(5);
-        participant3.populateOffers(5);
-        participant4.populateOffers(5);
+
 
         Thread t= new Thread(screen);
         Thread t1=new Thread(participant1);

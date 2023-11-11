@@ -3,36 +3,15 @@ import java.util.ArrayList;
 
 public class Participant implements Runnable {
     private String participantID;
-    private ArrayList<Offer> pendingOffers = new ArrayList<Offer>();
-    public void setPendingOffers(ArrayList<Offer> pendingOffers) {
-        this.pendingOffers = pendingOffers;
-    }
-
-
-
     public Participant(String participantID) {
         this.participantID = participantID;
     }
-
-
     public String getParticipantID() {
         return participantID;
     }
-
-
-
-    public void addOfferToPending(Offer toAdd){
-        this.pendingOffers.add(toAdd);
-    }
-    public void populateOffers(int numOffers){
-        for (int i = 0; i < numOffers; i++){
-            Offer aux = new Offer(this);
-            addOfferToPending(aux);
-        }
-    }
-
     public void addOffers(){
-        for (Offer offer : pendingOffers) {
+        long end=System.currentTimeMillis()+10000;
+        while(System.currentTimeMillis() < end) { //continuously adding offers for 10 sec
             // resource as key; participants fight to add to the same key etc...
             // list of objects as value
 
@@ -41,14 +20,15 @@ public class Participant implements Runnable {
 //            else
 //                create list corresponding to that resource
 
-            Screen.offers.put(offer.getOfferID(), offer);
+            Offer toAdd=new Offer(this);
+            Screen.offers.put(toAdd.getOfferID(),toAdd);
             //System.out.println(participantID + " added " + offer);
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // delete offers after pushing?
         }
     }
 
