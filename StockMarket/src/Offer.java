@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import static java.lang.Math.abs;
 
 
 // make ID static and iterate upon it whenever creating a new offer to have unique offers?
@@ -61,6 +62,13 @@ public class Offer {
         this.price=rand.nextDouble(100,500);
         this.quantity= rand.nextInt(1,100);
 //        System.out.println(this);
+    }
+
+    // TODO: implement amount logic
+    public boolean matches(Offer toMatch){
+        return this.getTicker().equals(toMatch.getTicker()) &&
+                this.isForSale() != toMatch.isForSale() &&
+                abs(this.price - toMatch.price) < 10;
     }
 
     @Override

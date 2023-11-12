@@ -15,13 +15,11 @@ public class Participant implements Runnable {
             // resource as key; participants fight to add to the same key etc...
             // list of objects as value
 
-//            if(Screen.offers(resource) exists as list)
-//                Add offer to that list
-//            else
-//                create list corresponding to that resource
-
             Offer toAdd=new Offer(this);
-            Screen.offers.put(toAdd.getOfferID(),toAdd);
+
+            // Get the list according to the ticker and add the offer to that list.
+            Screen.offers.get(toAdd.getTicker()).add(toAdd);
+
             //System.out.println(participantID + " added " + offer);
 
             try {

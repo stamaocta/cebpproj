@@ -1,4 +1,8 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 // Screen class
 // replace list with ConcurrentHashMap which has a key and a value:
@@ -7,9 +11,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 // use resource as key; value could vbe a collection
 public final class Screen implements Runnable{
-    public static ConcurrentHashMap<Integer, Offer> offers = new ConcurrentHashMap<Integer, Offer>();
+    public static ConcurrentHashMap<String, CopyOnWriteArrayList<Offer>> offers = new ConcurrentHashMap<String, CopyOnWriteArrayList<Offer>>();
+
+
 
     public Screen() {
+        List<String> initTickersList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
+
+        for(String ticker : initTickersList){
+            Screen.offers.put(ticker, new CopyOnWriteArrayList<Offer>());
+        }
+
     }
 
     @Override
@@ -26,24 +38,20 @@ public final class Screen implements Runnable{
 
     public static void matchOffers(){
 
-        for(Integer i: offers.keySet()){
-            Offer offer1=offers.get(i);
 
-            for(Integer j:offers.keySet()){
-                Offer offer2=offers.get(j);
+        for(String ticker: offers.keySet()){
+            CopyOnWriteArrayList<Offer> tickerList = offers.get(ticker);
+            for(Offer offer1 : tickerList)
+                for(Offer offer2 : tickerList)
+                    if(offer1.matches(offer2)){
+                        System.out.println(offer1.toString() + " matched " + offer2.toString());
+                        offer1.getParticipant().notifyTransaction(offer1.getOfferID());
+                        offer2.getParticipant().notifyTransaction(offer2.getOfferID());
+                        tickerList.remove(offer1);
+                        tickerList.remove(offer2);
+                        return ;
+                    }
 
-                // resource as key; protect when adding/transactioning etc
-                if(offer1.getTicker().equals(offer2.getTicker()) && offer1.isForSale()!=offer2.isForSale()){
-                    System.out.println(offer1.toString() + " matched " + offer2.toString());
-                    offer1.getParticipant().notifyTransaction(offer1.getOfferID());
-                    offer2.getParticipant().notifyTransaction(offer2.getOfferID());
-                    offers.remove(offer1.getOfferID());
-                    offers.remove(offer2.getOfferID());
-                    return ;
-                }
-
-            }
         }
-
     }
 }

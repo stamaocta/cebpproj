@@ -33,7 +33,7 @@ public class StockExchangeMain {
         }
 
         System.out.println("Final list of offers:");
-        for (Integer i: Screen.offers.keySet()) {
+        for (String i: Screen.offers.keySet()) {
 
             System.out.println( Screen.offers.get(i));
         }
