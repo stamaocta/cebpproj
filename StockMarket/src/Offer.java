@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static java.lang.Math.abs;
 
 
@@ -10,13 +12,14 @@ import static java.lang.Math.abs;
 public class Offer {
     enum saleEnum {SELL, BUY};
 
-    private static int numInstance = 0;
+    private static AtomicInteger numInstance = new AtomicInteger();
     private int offerID; // unique ID of the offer
     private String ticker; // selling potatoes, USD, etc...
     private saleEnum saleStatus;
     private Participant participant; // the owner who made the class
-    private double price;
+    private int price;
     private int quantity;
+    // TODO: CALLBACK? Participants update, based on private int staleness;
 
     public int getOfferID() {
         return offerID;
@@ -24,6 +27,14 @@ public class Offer {
 
     public String getTicker() {
         return ticker;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public saleEnum isForSale() {
@@ -34,9 +45,9 @@ public class Offer {
         return participant;
     }
 
-    public Offer(String ticker, saleEnum saleStatus, Participant participant, double price, int quantity) {
-        this.offerID = numInstance;
-        numInstance += 1;
+    public Offer(String ticker, saleEnum saleStatus, Participant participant, int price, int quantity) {
+        this.offerID = numInstance.incrementAndGet();
+        numInstance.addAndGet(1);
         this.ticker = ticker;
         this.saleStatus = saleStatus;
         this.participant = participant;
@@ -44,9 +55,9 @@ public class Offer {
         this.quantity = quantity;
     }
 
+
     public Offer(Participant participant) {
-        this.offerID = numInstance;
-        numInstance += 1;
+        this.offerID = numInstance.incrementAndGet();
 
         List<String> randomResourceList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
 
@@ -59,7 +70,7 @@ public class Offer {
             this.saleStatus=saleEnum.BUY;
         this.participant = participant;
 
-        this.price=rand.nextDouble(100,500);
+        this.price=rand.nextInt(100,500);
         this.quantity= rand.nextInt(1,100);
 //        System.out.println(this);
     }

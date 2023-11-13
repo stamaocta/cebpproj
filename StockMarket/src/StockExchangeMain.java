@@ -32,6 +32,9 @@ public class StockExchangeMain {
             e.printStackTrace();
         }
 
+        try{
+            Thread.sleep(10000);
+        } catch(Exception e){}
         System.out.println("Final list of offers:");
         for (String i: Screen.offers.keySet()) {
 

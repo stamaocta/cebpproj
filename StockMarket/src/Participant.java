@@ -1,14 +1,17 @@
-import java.sql.ClientInfoStatus;
-import java.util.ArrayList;
-
 public class Participant implements Runnable {
     private String participantID;
+
+
     public Participant(String participantID) {
         this.participantID = participantID;
     }
+
+
     public String getParticipantID() {
         return participantID;
     }
+
+
     public void addOffers(){
         long end=System.currentTimeMillis()+10000;
         while(System.currentTimeMillis() < end) { //continuously adding offers for 10 sec
@@ -28,6 +31,10 @@ public class Participant implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void updateStaleOffer(String offerID){
+
     }
 
     public void notifyTransaction(int offerID){
