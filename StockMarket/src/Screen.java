@@ -72,4 +72,30 @@ public final class Screen implements Runnable{
 
         }
     }
+
+    public static int findIndex(String ticker, int price) {
+
+        CopyOnWriteArrayList<Offer> currentRow = Screen.offers.get(ticker);
+        int rightBoundary = currentRow.size() - 1;
+        int leftBoundary = 0;
+        int middle;
+
+        while (leftBoundary <= rightBoundary) {
+
+            middle = leftBoundary + (rightBoundary - leftBoundary) / 2;
+
+            if (price == currentRow.get(middle).getPrice()) {
+                return middle;
+            }
+            if (price < currentRow.get(middle).getPrice()) {
+                rightBoundary = middle - 1;
+            }
+            if (price > currentRow.get(middle).getPrice()) {
+                leftBoundary = middle + 1;
+            }
+        }
+
+        return leftBoundary;
+
+    }
 }

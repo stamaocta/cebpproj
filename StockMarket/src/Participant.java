@@ -21,7 +21,9 @@ public class Participant implements Runnable {
             Offer toAdd=new Offer(this);
 
             // Get the list according to the ticker and add the offer to that list.
-            Screen.offers.get(toAdd.getTicker()).add(toAdd);
+
+            int indexToAdd = Screen.findIndex(toAdd.getTicker(),toAdd.getPrice());
+            Screen.offers.get(toAdd.getTicker()).add(indexToAdd,toAdd);
 
             //System.out.println(participantID + " added " + offer);
 

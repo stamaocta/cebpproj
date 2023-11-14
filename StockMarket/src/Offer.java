@@ -29,6 +29,8 @@ public class Offer {
         return ticker;
     }
 
+    public int getPrice() {return price; }
+
     public int getQuantity() {
         return quantity;
     }
@@ -64,14 +66,18 @@ public class Offer {
         Random rand = new Random();
         // pick a random resource from the aforementioned list
         this.ticker = randomResourceList.get(rand.nextInt(randomResourceList.size()));
-        if(rand.nextBoolean())
-            this.saleStatus=saleEnum.SELL;
-        else
-            this.saleStatus=saleEnum.BUY;
-        this.participant = participant;
 
         this.price=rand.nextInt(100,500);
         this.quantity= rand.nextInt(1,100);
+
+        if(rand.nextBoolean()) {
+            this.saleStatus = saleEnum.SELL;
+            this.price = this.price * -1;
+        }
+        else {
+            this.saleStatus = saleEnum.BUY;
+        }
+        this.participant = participant;
 //        System.out.println(this);
     }
 
@@ -79,7 +85,7 @@ public class Offer {
     public boolean matches(Offer toMatch){
         return this.getTicker().equals(toMatch.getTicker()) &&
                 this.isForSale() != toMatch.isForSale() &&
-                abs(this.price - toMatch.price) < 10;
+                abs(this.price + toMatch.price) < 10;
     }
 
     @Override
