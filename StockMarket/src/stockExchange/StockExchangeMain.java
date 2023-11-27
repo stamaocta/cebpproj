@@ -1,5 +1,6 @@
-import java.util.ArrayList;
-import java.util.List;
+package stockExchange;
+
+import stockExchange.Participant;
 
 public class StockExchangeMain {
     public static void main(String[] args) {

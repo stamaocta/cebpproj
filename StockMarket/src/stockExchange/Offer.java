@@ -1,3 +1,5 @@
+package stockExchange;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -94,7 +96,7 @@ public class Offer {
         if(saleStatus==saleEnum.BUY) saleSts="BUY";
         else saleSts="SELL";
 
-        return "Offer{" +
+        return "stockExchange.Offer{" +
                 "offerID=" + offerID +
                 ", ticker='" + ticker + '\'' +
                 ", saleStatus=" + saleSts +

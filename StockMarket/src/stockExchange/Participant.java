@@ -1,3 +1,11 @@
+package stockExchange;
+
+import messageService.Sender;
+import stockExchange.Offer;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 public class Participant implements Runnable {
     private String participantID;
 
@@ -12,7 +20,7 @@ public class Participant implements Runnable {
     }
 
 
-    public void addOffers(){
+    public void addOffers() throws IOException, TimeoutException {
         long end=System.currentTimeMillis()+10000;
         while(System.currentTimeMillis() < end) { //continuously adding offers for 10 sec
             // resource as key; participants fight to add to the same key etc...
@@ -24,6 +32,15 @@ public class Participant implements Runnable {
 
             int indexToAdd = Screen.findIndex(toAdd.getTicker(),toAdd.getPrice());
             Screen.offers.get(toAdd.getTicker()).add(indexToAdd,toAdd);
+
+            if(toAdd.getPrice()>0){
+                Sender buySender= new Sender("Buy Channel");
+                buySender.sendMessage("Offer "+ toAdd.toString() + " was added");
+            }
+            else{
+                Sender sellSender= new Sender("Sell Channel");
+                sellSender.sendMessage("Offer "+ toAdd.toString() + " was added");
+            }
 
             //System.out.println(participantID + " added " + offer);
 
@@ -45,7 +62,13 @@ public class Participant implements Runnable {
 
     @Override
     public void run() {
-        addOffers();
+        try {
+            addOffers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
     }
 
 

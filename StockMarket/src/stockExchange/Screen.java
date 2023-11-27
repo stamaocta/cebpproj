@@ -1,12 +1,17 @@
-import javax.lang.model.element.QualifiedNameable;
+package stockExchange;
+
+import messageService.Sender;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeoutException;
 
-// Screen class
+// stockExchange.Screen class
 // replace list with ConcurrentHashMap which has a key and a value:
-// key will be the unique ID of the offer and value will be the actual Offer object with all the data.
+// key will be the unique ID of the offer and value will be the actual stockExchange.Offer object with all the data.
 
 
 // use resource as key; value could vbe a collection
@@ -32,12 +37,19 @@ public final class Screen implements Runnable{
             e.printStackTrace();
         }
         while(offers.size()>1) {
-            processOffers();
+            try {
+                processOffers();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private static void transaction(Offer offer1, Offer offer2, CopyOnWriteArrayList<Offer> tickerList){
-        System.out.println(offer1.toString() + " matched " + offer2.toString());
+    private static void transaction(Offer offer1, Offer offer2, CopyOnWriteArrayList<Offer> tickerList) throws IOException, TimeoutException {
+        Sender transactionSender= new Sender("Transaction Channel");
+        transactionSender.sendMessage(offer1.toString() + " matched " + offer2.toString());
         offer1.getParticipant().notifyTransaction(offer1.getOfferID());
         offer2.getParticipant().notifyTransaction(offer2.getOfferID());
 
@@ -57,7 +69,7 @@ public final class Screen implements Runnable{
         }
     }
 
-    public static void processOffers(){
+    public static void processOffers() throws IOException, TimeoutException {
 
         for(String ticker: offers.keySet()){
             CopyOnWriteArrayList<Offer> tickerList = offers.get(ticker);
