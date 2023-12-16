@@ -35,11 +35,11 @@ public class Participant implements Runnable {
 
             if(toAdd.getPrice()>0){
                 Sender buySender= new Sender("Buy Channel");
-                buySender.sendMessage("Offer "+ toAdd.toString() + " was added");
+                buySender.sendMessage(toAdd);
             }
             else{
                 Sender sellSender= new Sender("Sell Channel");
-                sellSender.sendMessage("Offer "+ toAdd.toString() + " was added");
+                sellSender.sendMessage(toAdd);
             }
 
             //System.out.println(participantID + " added " + offer);

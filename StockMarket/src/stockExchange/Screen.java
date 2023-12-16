@@ -49,7 +49,8 @@ public final class Screen implements Runnable{
 
     private static void transaction(Offer offer1, Offer offer2, CopyOnWriteArrayList<Offer> tickerList) throws IOException, TimeoutException {
         Sender transactionSender= new Sender("Transaction Channel");
-        transactionSender.sendMessage(offer1.toString() + " matched " + offer2.toString());
+        Transaction transaction=new Transaction(offer1,offer2);
+        transactionSender.sendMessage(transaction);
         offer1.getParticipant().notifyTransaction(offer1.getOfferID());
         offer2.getParticipant().notifyTransaction(offer2.getOfferID());
 
