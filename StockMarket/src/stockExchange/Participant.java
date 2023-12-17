@@ -4,6 +4,7 @@ import messageService.Sender;
 import stockExchange.Offer;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 public class Participant implements Runnable {
@@ -21,6 +22,7 @@ public class Participant implements Runnable {
 
 
     public void addOffers() throws IOException, TimeoutException {
+        Random rand = new Random();
         long end=System.currentTimeMillis()+10000;
         while(System.currentTimeMillis() < end) { //continuously adding offers for 10 sec
             // resource as key; participants fight to add to the same key etc...
@@ -42,10 +44,10 @@ public class Participant implements Runnable {
                 sellSender.sendMessage(toAdd);
             }
 
-            //System.out.println(participantID + " added " + offer);
+            System.out.println(participantID + " added " + toAdd);
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(rand.nextInt(500, 1000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -37,6 +37,10 @@ public class Offer {
         return quantity;
     }
 
+    public saleEnum getSaleStatus() {
+        return saleStatus;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -49,9 +53,8 @@ public class Offer {
         return participant;
     }
 
-    public Offer(String ticker, saleEnum saleStatus, Participant participant, int price, int quantity) {
-        this.offerID = numInstance.incrementAndGet();
-        numInstance.addAndGet(1);
+    public Offer(int offerID, String ticker, saleEnum saleStatus, Participant participant, int price, int quantity) {
+        this.offerID = offerID;
         this.ticker = ticker;
         this.saleStatus = saleStatus;
         this.participant = participant;
@@ -83,7 +86,6 @@ public class Offer {
 //        System.out.println(this);
     }
 
-    // TODO: implement amount logic
     public boolean matches(Offer toMatch){
         return this.getTicker().equals(toMatch.getTicker()) &&
                 this.isForSale() != toMatch.isForSale() &&

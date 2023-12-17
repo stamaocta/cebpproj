@@ -36,18 +36,16 @@ public final class Screen implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        while(offers.size()>1) {
+        while(true) {
             try {
                 processOffers();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
+            } catch (IOException | TimeoutException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private static void transaction(Offer offer1, Offer offer2, CopyOnWriteArrayList<Offer> tickerList) throws IOException, TimeoutException {
+    private static void transaction(Offer offer1, Offer offer2, CopyOnWriteArrayList<Offer> WorkingOffers) throws IOException, TimeoutException {
         Sender transactionSender= new Sender("Transaction Channel");
         Transaction transaction=new Transaction(offer1,offer2);
         transactionSender.sendMessage(transaction);
@@ -59,28 +57,32 @@ public final class Screen implements Runnable{
         int quantityOffer1 = offer1.getQuantity(), quantityOffer2 = offer2.getQuantity();
 
         if(quantityOffer1 > quantityOffer2){
-            offer1.setQuantity(quantityOffer1 - quantityOffer2);
-            tickerList.remove(offer2);
+            WorkingOffers.remove(offer2);
+            WorkingOffers.remove(offer1);
+            WorkingOffers.add(new Offer(offer1.getOfferID(), offer1.getTicker(), offer1.getSaleStatus(), offer1.getParticipant(), offer1.getPrice(), (quantityOffer1 - quantityOffer2)));
+
         }else if(quantityOffer1 == quantityOffer2){
-            tickerList.remove(offer1);
-            tickerList.remove(offer2);
+            WorkingOffers.remove(offer1);
+            WorkingOffers.remove(offer2);
         }else {
-            offer2.setQuantity(quantityOffer2 - quantityOffer1);
-            tickerList.remove(offer1);
+            WorkingOffers.remove(offer1);
+            WorkingOffers.remove(offer2);
+            WorkingOffers.add(new Offer(offer2.getOfferID(), offer2.getTicker(), offer2.getSaleStatus(), offer2.getParticipant(), offer2.getPrice(), (quantityOffer2 - quantityOffer1)));
+
         }
     }
 
     public static void processOffers() throws IOException, TimeoutException {
 
         for(String ticker: offers.keySet()){
-            CopyOnWriteArrayList<Offer> tickerList = offers.get(ticker);
-            for(Offer offer1 : tickerList)
-                for(Offer offer2 : tickerList)
+            CopyOnWriteArrayList<Offer> WorkingOffers = offers.get(ticker);
+            for(Offer offer1 : WorkingOffers)
+                for(Offer offer2 : WorkingOffers)
                     if(offer1.matches(offer2)){
-                        transaction(offer1, offer2, tickerList);
+                        transaction(offer1, offer2, WorkingOffers);
 
                         // And because we want changes to reflect...
-                        tickerList = offers.get(ticker);
+                        return;
                     }
 
         }
