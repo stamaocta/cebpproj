@@ -20,6 +20,8 @@ public class Offer {
     private saleEnum saleStatus;
     private Participant participant; // the owner who made the class
     private int price;
+    private int tolerance;
+    private int staleness;
     private int quantity;
     // TODO: CALLBACK? Participants update, based on private int staleness;
 
@@ -53,6 +55,14 @@ public class Offer {
         return participant;
     }
 
+    public int getTolerance() {return tolerance;}
+    public void setTolerance(int t) {
+        if (saleStatus == saleEnum.SELL) tolerance += 10;
+        else tolerance -= 10;
+    }
+    public int getStaleness() {return staleness;}
+    public void setStaleness() {this.staleness = 5;}
+
     public Offer(int offerID, String ticker, saleEnum saleStatus, Participant participant, int price, int quantity) {
         this.offerID = offerID;
         this.ticker = ticker;
@@ -60,11 +70,15 @@ public class Offer {
         this.participant = participant;
         this.price = price;
         this.quantity = quantity;
+        if (saleStatus == saleEnum.SELL) this.tolerance = 10;
+        else this.tolerance = -10;
+        this.staleness = 5;
     }
 
 
     public Offer(Participant participant) {
         this.offerID = numInstance.incrementAndGet();
+        this.staleness = 5;
 
         List<String> randomResourceList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
 
@@ -78,9 +92,11 @@ public class Offer {
         if(rand.nextBoolean()) {
             this.saleStatus = saleEnum.SELL;
             this.price = this.price * -1;
+            this.tolerance = 10;
         }
         else {
             this.saleStatus = saleEnum.BUY;
+            this.tolerance = -10;
         }
         this.participant = participant;
 //        System.out.println(this);
@@ -89,7 +105,8 @@ public class Offer {
     public boolean matches(Offer toMatch){
         return this.getTicker().equals(toMatch.getTicker()) &&
                 this.isForSale() != toMatch.isForSale() &&
-                abs(this.price + toMatch.price) < 10;
+                abs(this.price + toMatch.price) <= abs(this.tolerance) &&
+                abs(this.price + toMatch.price) <= abs(toMatch.getTolerance());
     }
 
     @Override
@@ -98,13 +115,15 @@ public class Offer {
         if(saleStatus==saleEnum.BUY) saleSts="BUY";
         else saleSts="SELL";
 
-        return "stockExchange.Offer{" +
-                "offerID=" + offerID +
-                ", ticker='" + ticker + '\'' +
-                ", saleStatus=" + saleSts +
-                ", participant=" + participant.getParticipantID() +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
+        String finalString;
+        //"┌──┬───────┬──────┬───────────┬─────┬────────┐"
+        //"│ID│Tickers│Status│Participant│Price│Quantity│"
+        //"├──┼───────┼──────┼───────────┼─────┼────────┤"
+        //"└──┴───────┴──────┴───────────┴─────┴────────┘"
+        finalString = String.format(
+                "├───┼───────┼──────┼───────────┼─────┼────────┼─────────┤\n│%3d│%7s│%6s│%11s│%5d│%-8d│%9d│",
+                offerID,ticker,saleSts,participant.getParticipantID(),price,quantity,tolerance);
+
+        return finalString;
     }
 }

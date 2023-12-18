@@ -16,6 +16,11 @@ import static java.lang.System.currentTimeMillis;
 public class TradingTape<T> implements Runnable {
 
     private String queue_name;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    String currentColor;
     private Class<T> typeParameterClass;
     private Channel channel;
     private ArrayList<T> messagesList = new ArrayList<>();
@@ -30,6 +35,9 @@ public class TradingTape<T> implements Runnable {
         Connection connection = factory.newConnection();
         channel = connection.createChannel();
         channel.queueDeclare(queue_name, false, false, false, null);
+        if (queue_name == "Buy Channel") currentColor = ANSI_RED;
+        if (queue_name == "Sell Channel") currentColor = ANSI_GREEN;
+        if (queue_name == "Transaction Channel") currentColor = ANSI_CYAN;
     }
 
     public void printMessages(){
@@ -43,7 +51,7 @@ public class TradingTape<T> implements Runnable {
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
-                System.out.println(" [ " + queue_name + " ] Received '" + message + "'");
+                System.out.println(" [ "+ currentColor + queue_name + ANSI_RESET +" ] Received '" + message + "'");
                 T object =gson.fromJson(message, typeParameterClass);
                 messagesList.add(object);
             };

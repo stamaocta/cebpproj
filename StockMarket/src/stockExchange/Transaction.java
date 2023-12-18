@@ -11,9 +11,11 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "offer1=" + offer1 +
-                ", offer2=" + offer2 +
-                '}';
+        return "Selling Offer & Buying Offer:\n" +
+                "┌───┬───────┬──────┬───────────┬─────┬────────┬─────────┐\n" +
+                "│ ID│Tickers│Status│Participant│Price│Quantity│Tolerance│\n" +
+                (offer1.getSaleStatus() == Offer.saleEnum.SELL ? offer1 : offer2) + '\n' +
+                (offer1.getSaleStatus() == Offer.saleEnum.BUY ? offer1 : offer2) +
+                "\n└───┴───────┴──────┴───────────┴─────┴────────┴─────────┘\n";
     }
 }
