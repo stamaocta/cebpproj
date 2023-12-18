@@ -89,13 +89,17 @@ public final class Matchmaker implements Runnable{
 
         CopyOnWriteArrayList<Offer> WorkingOffers = Screen.offers.get(myTicker);
         Offer offer2;
+        int index;
         for(Offer offer1 : WorkingOffers) {
             if (offer1.getStaleness() == 0) {
                 offer1.setTolerance(10);
                 offer1.setStaleness();
             }
             else {
-                offer2 = WorkingOffers.get(findIndex(myTicker, -1 * offer1.getPrice(), offer1.getTolerance()));
+                index = findIndex(myTicker, -1 * offer1.getPrice(), offer1.getTolerance());
+                if (index < 0 ) index = 0;
+                if( index > WorkingOffers.size() - 1) index = WorkingOffers.size() - 1;
+                offer2 = WorkingOffers.get(index);
                 if (offer1.matches(offer2)) {
                     transaction(offer1, offer2, WorkingOffers);
 
@@ -121,12 +125,10 @@ public final class Matchmaker implements Runnable{
                 return middle;
             }
             if (price < currentRow.get(middle).getPrice()) {
-                if ((middle - 1) >= 0) rightBoundary = middle - 1;
-                else return 0;
+                    rightBoundary = middle - 1;
             }
             if (price > currentRow.get(middle).getPrice()) {
-                if ((middle + 1) <= (currentRow.size() - 1)) leftBoundary = middle + 1;
-                else return currentRow.size() - 1;
+                    leftBoundary = middle + 1;
             }
         }
 
