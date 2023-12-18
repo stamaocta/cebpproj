@@ -105,6 +105,7 @@ public class Offer {
     public boolean matches(Offer toMatch){
         return this.getTicker().equals(toMatch.getTicker()) &&
                 this.isForSale() != toMatch.isForSale() &&
+                this.participant.getParticipantID() != toMatch.participant.getParticipantID() &&
                 abs(this.price + toMatch.price) <= abs(this.tolerance) &&
                 abs(this.price + toMatch.price) <= abs(toMatch.getTolerance());
     }
