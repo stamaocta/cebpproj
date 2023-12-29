@@ -61,7 +61,7 @@ public class Offer {
         else tolerance -= 10;
     }
     public int getStaleness() {return staleness;}
-    public void setStaleness() {this.staleness = 5;}
+    public void setStaleness() {this.staleness = 1;}
 
     public Offer(int offerID, String ticker, saleEnum saleStatus, Participant participant, int price, int quantity) {
         this.offerID = offerID;
@@ -72,13 +72,13 @@ public class Offer {
         this.quantity = quantity;
         if (saleStatus == saleEnum.SELL) this.tolerance = 10;
         else this.tolerance = -10;
-        this.staleness = 5;
+        this.staleness = 1;
     }
 
 
     public Offer(Participant participant) {
         this.offerID = numInstance.incrementAndGet();
-        this.staleness = 5;
+        this.staleness = 1;
 
         List<String> randomResourceList = Arrays.asList("aaa", "bbb", "ccc", "ddd");
 
